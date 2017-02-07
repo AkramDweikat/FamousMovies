@@ -2,6 +2,8 @@ package com.example.akram.famousmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -87,6 +89,22 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    public boolean isOnline() {
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
     public class GitMoviesFromSiteTast extends AsyncTask<URL,Void,Integer>{
 
         @Override
@@ -103,9 +121,14 @@ public class MainActivity extends AppCompatActivity {
             String resultString;
             Integer result =0;
             try {
-                resultString = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-                NetworkUtils.parseResult(resultString,mMovieList);
-                result = 1 ;
+                if(isOnline()) {
+                    resultString = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                    NetworkUtils.parseResult(resultString, mMovieList);
+                    result = 1;
+                }
+                else{
+                    result = -1;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -120,6 +143,10 @@ public class MainActivity extends AppCompatActivity {
                 mGridViewAdaper.notifyDataSetChanged();
                 mGridView.invalidateViews();
                 mGridView.setAdapter(mGridViewAdaper);
+            }
+            else if (result == -1){
+                Toast.makeText(MainActivity.this, "Check Internet Connection Please!", Toast.LENGTH_SHORT).show();
+
             }
             else {
                 Toast.makeText(MainActivity.this, "Failed to fetch data!", Toast.LENGTH_SHORT).show();
