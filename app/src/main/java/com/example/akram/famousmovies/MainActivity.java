@@ -1,10 +1,13 @@
 package com.example.akram.famousmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mGridView.setAdapter(mGridViewAdaper);
 
 
-        new GitMoviesFromSiteTast().execute(NetworkUtils.buildUrl(0));
+        loadMovies("vote_average.desc");
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -58,6 +61,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void loadMovies(String moviesSearchBY){
+
+        new GitMoviesFromSiteTast().execute(NetworkUtils.buildUrl(moviesSearchBY));
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemThatWasClickedId = item.getItemId();
+        if (itemThatWasClickedId == R.id.action_orderby_rate) {
+            loadMovies("vote_average.desc");
+            return true;
+        }
+        else if(itemThatWasClickedId == R.id.action_orderby_poplarity){
+            loadMovies("popularity.desc");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public class GitMoviesFromSiteTast extends AsyncTask<URL,Void,Integer>{
 
@@ -65,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressBar.setVisibility(View.VISIBLE);
+            mMovieList.clear();
 
         }
 
@@ -88,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.INVISIBLE);
             if (result == 1) {
                 mGridViewAdaper.setData(mMovieList);
+                mGridViewAdaper.notifyDataSetChanged();
+                mGridView.invalidateViews();
+                mGridView.setAdapter(mGridViewAdaper);
             }
             else {
                 Toast.makeText(MainActivity.this, "Failed to fetch data!", Toast.LENGTH_SHORT).show();
@@ -95,11 +127,6 @@ public class MainActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.GONE);
 
         }
-
-
-
-
-
     }
 
 }
