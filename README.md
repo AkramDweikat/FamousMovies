@@ -3,6 +3,7 @@ Android Application, that displays movies from the Movie Database (www.themovied
 
 
 Before you Run App:
+
     1 .create an empty class file under utilities. and call it, APIKey , utilities/APIKey.class.
 
     2 .Copy and Paste the code into the APIKey file.
