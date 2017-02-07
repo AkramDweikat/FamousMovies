@@ -1,8 +1,10 @@
 package com.example.akram.famousmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -40,8 +42,17 @@ public class MainActivity extends AppCompatActivity {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(MainActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+
+                MovieItem movie =  mMovieList.get(position);
+
+                Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
+                intent.putExtra("title", movie.getMovieTitle());
+                intent.putExtra("image", movie.getMovieImage());
+                intent.putExtra("rate", ""+movie.getMovieAvgVoteRate());
+                intent.putExtra("plot", movie.getMoviePlotSynopsis());
+                intent.putExtra("date", movie.getMovieDate());
+
+                startActivity(intent);
             }
         });
 
