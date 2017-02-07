@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -35,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         new GitMoviesFromSiteTast().execute(NetworkUtils.buildUrl(0));
+
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Toast.makeText(MainActivity.this, "" + position,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
