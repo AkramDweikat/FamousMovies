@@ -5,4 +5,8 @@
     <string name="movie_date">Movie Release Date</string>
     <string name="movie_rate">Movie Average Rate</string>
 
+    <string name="search_by_rate"> Sort By Popularity</string>
+    <string name="search_by_popular">Sort By Rate</string>
+
+
 </resources>
