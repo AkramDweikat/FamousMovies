@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mGridView.setAdapter(mGridViewAdaper);
 
 
-        loadMovies("vote_average.desc");
+        loadMovies("popularity");
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_orderby_rate) {
-            loadMovies("vote_average.desc");
+            loadMovies("top_rated");
             return true;
         }
         else if(itemThatWasClickedId == R.id.action_orderby_poplarity){
-            loadMovies("popularity.desc");
+            loadMovies("popularity");
             return true;
         }
         return super.onOptionsItemSelected(item);

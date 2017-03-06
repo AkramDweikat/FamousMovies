@@ -1,6 +1,7 @@
 package com.example.akram.famousmovies.utilities;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.akram.famousmovies.MovieItem;
 
@@ -22,23 +23,29 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    final static String MovieDB_BASE_URL = "https://api.themoviedb.org/3/discover/movie?";
+    final static String MovieDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     final static String PARAM_API_KEY= "api_key";
     final static String API_KEY= new APIKey().getAPIKEY();
-    final static String PARAM_QUERY= "sort_by";
-    final static String PARAM_QUERY_Sort_By="popularity.desc";
+    private static String PARAM_QUERY_Sort_By="popular?";
 
 
     public static URL buildUrl(String movieDB_SearchPreference) {
 
+        if (movieDB_SearchPreference == "popularity")
+            PARAM_QUERY_Sort_By = "popular";
+        else if (movieDB_SearchPreference == "top_rated")
+            PARAM_QUERY_Sort_By = "top_rated";
+
+
         Uri builtUri = Uri.parse(MovieDB_BASE_URL).buildUpon()
-                .appendQueryParameter(PARAM_QUERY,movieDB_SearchPreference)
+                .appendPath(PARAM_QUERY_Sort_By)
                 .appendQueryParameter(PARAM_API_KEY,API_KEY )
                 .build();
-
         URL url = null;
         try {
+
             url = new URL(builtUri.toString());
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
